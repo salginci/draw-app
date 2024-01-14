@@ -28,7 +28,12 @@ function LineToTool(){
 				//line between mouse pressed and released
 				updatePixels();
 				//draw the line
-				line(startMouseX, startMouseY, mouseX, mouseY);
+                var weight=this.slider.value();
+                
+                strokeWeight( weight);
+			    line(startMouseX, startMouseY, mouseX, mouseY);
+				pop();
+				
 			}
 
 		}
@@ -41,6 +46,25 @@ function LineToTool(){
 			startMouseX = -1;
 			startMouseY = -1;
 		}
+	};
+    
+    
+     this.strokeWeight=5;  
+     this.slider=null;    
+     this.populateOptions = function() {
+          select(".options").style('background-color', '#333');
+		 
+          this.label = createP("Line Weight");
+           this.label.parent("optionsArea");
+          this.label.style('font-size', '14px');
+         
+          this.slider = createSlider(0, 20, this.strokeWeight,1);
+          this.slider.size(100);
+          this.slider.parent("optionsArea");
+        
+         
+   
+		
 	};
 
 

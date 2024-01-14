@@ -22,8 +22,13 @@ function FreehandTool(){
 			//if we already have values for previousX and Y we can draw a line from 
 			//there to the current mouse location
 			else{
+                push();
+                var weight=this.slider.value();
+                
+                strokeWeight( weight);
 				line(previousMouseX, previousMouseY, mouseX, mouseY);
-				previousMouseX = mouseX;
+				pop();
+                previousMouseX = mouseX;
 				previousMouseY = mouseY;
 			}
 		}
@@ -35,4 +40,26 @@ function FreehandTool(){
 			previousMouseY = -1;
 		}
 	};
+     this.strokeWeight=5;
+    
+     
+     this.slider=null;
+         
+    
+     this.populateOptions = function() {
+          select(".options").style('background-color', '#333');
+		 
+          this.label = createP("Line Weight");
+           this.label.parent("optionsArea");
+          this.label.style('font-size', '14px');
+         
+          this.slider = createSlider(0, 20, this.strokeWeight,1);
+          this.slider.size(100);
+          this.slider.parent("optionsArea");
+        
+         
+   
+		
+	};
+    
 }

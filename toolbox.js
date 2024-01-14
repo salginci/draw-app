@@ -57,14 +57,23 @@ function Toolbox() {
 						"unselectTool")) {
 					this.selectedTool.unselectTool();
 				}
+                	if (this.selectedTool != null) {
+						select(".options").html("");
+				}
 				//select the tool and highlight it on the toolbar
 				this.selectedTool = this.tools[i];
 				select("#" + toolName + "sideBarItem").style("border", "2px solid blue");
 
 				//if the tool has an options area. Populate it now.
 				if (this.selectedTool.hasOwnProperty("populateOptions")) {
+                   
 					this.selectedTool.populateOptions();
-				}
+                      select(".options").style('background-color', 'rgb(191 191 191)');
+				} 
+                else
+                    {
+                         select(".options").style('background-color', '#34349d');
+                    }
 			}
 		}
 	};

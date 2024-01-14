@@ -20,9 +20,9 @@ function TextTool(){
 			}
 
 			else{
-                // Updates the canvas with the RGBA values in the pixels array.
+                
 		        updatePixels();
-				line(startMouseX, startMouseY, mouseX, mouseY);
+				// TODO Add text box and 
 			}
 
 		}

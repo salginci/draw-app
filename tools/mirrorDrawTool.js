@@ -1,4 +1,4 @@
-function mirrorDrawTool() {
+function MirrorDrawTool() {
 	this.name = "mirrorDraw";
 	this.icon = "assets/mirrorDraw.jpg";
 
@@ -113,25 +113,30 @@ function mirrorDrawTool() {
 	this.unselectTool = function() {
 		updatePixels();
 		//clear options
-		select(".options").html("");
+	
 	};
 
 	//adds a button and click handler to the options area. When clicked
 	//toggle the line of symmetry between horizonatl to vertical
 	this.populateOptions = function() {
+       
 		select(".options").html(
-			"<button id='directionButton'>Make Horizontal</button>");
+			"<button id='directionButton'> — </button>");
 		// 	//click handler
-		select("#directionButton").mouseClicked(function() {
+		var b= select("#directionButton");
+        
+        b.mouseClicked(function() {
 			var button = select("#" + this.elt.id);
 			if (self.axis == "x") {
 				self.axis = "y";
 				self.lineOfSymmetry = height / 2;
-				button.html('Make Vertical');
+                b.title="Make Vertical"
+				button.html(' | ');
 			} else {
 				self.axis = "x";
 				self.lineOfSymmetry = width / 2;
-				button.html('Make Horizontal');
+                  b.title="Make Horizontal"
+				button.html(' — ');
 			}
 		});
 	};

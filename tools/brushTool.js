@@ -5,34 +5,49 @@ function BrushTool(){
 	var startMouseX = -1;
 	var startMouseY = -1;
 	var drawing = false;
+	var previousMouseX = -1;
+	var previousMouseY = -1;
 
 	this.draw = function(){
-
+		//if the mouse is pressed
 		if(mouseIsPressed){
-			if(startMouseX == -1){
-				startMouseX = mouseX;
-				startMouseY = mouseY;
-				drawing = true;
-                
-               // Loads the current value of each pixel on the canvas into the pixels array. 
-               // With this it has been preventing drawing lines for each mouseX and mouseY
-			   loadPixels();
+			if (previousMouseX == -1){
+				previousMouseX = mouseX;
+				previousMouseY = mouseY;
 			}
 
 			else{
-                // Updates the canvas with the RGBA values in the pixels array.
-		        updatePixels();
-				line(startMouseX, startMouseY, mouseX, mouseY);
+                push();
+                var weight=this.slider.value();
+                
+                strokeWeight( weight);
+                // TODO instead of line try spreadtool
+				line(previousMouseX, previousMouseY, mouseX, mouseY);
+				pop();
+                previousMouseX = mouseX;
+				previousMouseY = mouseY;
 			}
-
 		}
-
-		else if(drawing){
-			drawing = false;
-			startMouseX = -1;
-			startMouseY = -1;
+		 else{
+			previousMouseX = -1;
+			previousMouseY = -1;
 		}
 	};
-
+    
+    
+     this.strokeWeight=5;     
+     this.slider=null;         
+    
+     this.populateOptions = function() {
+          select(".options").style('background-color', '#333');
+		 
+          this.label = createP("Line Weight");
+           this.label.parent("optionsArea");
+          this.label.style('font-size', '14px');
+         
+          this.slider = createSlider(0, 20, this.strokeWeight,1);
+          this.slider.size(100);
+          this.slider.parent("optionsArea");		
+	};
 
 }
