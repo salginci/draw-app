@@ -180,5 +180,8 @@ html, body {
     height: 30px;
     margin-right: 5px;  
 }
+.shape-button{
+border:none;
+}
 
 

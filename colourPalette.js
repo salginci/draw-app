@@ -1,7 +1,7 @@
 //Displays and handles the colour palette.
 function ColourPalette(foregroundColorPicker,backgroundColorPicker) {
     
-
+    // CUSTOM CODE START FOR ADVANCED COLOR PALETTE
     this.foregroundColorPicker=foregroundColorPicker;
     this.backgroundColorPicker=backgroundColorPicker;
     this.foregroundColor=color("#000000");
@@ -20,9 +20,9 @@ function ColourPalette(foregroundColorPicker,backgroundColorPicker) {
 		var jsEvent=e.srcElement;
         var c = jsEvent.value;
         this.backgroundColour = color(c);
-        //background(c);
+       
 	}
-	 
+    // CUSTOM CODE END	 
 	var self = this;
 
 }

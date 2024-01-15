@@ -22,7 +22,7 @@ function ImageTool(){
 			else{
                 // Updates the canvas with the RGBA values in the pixels array.
 		        updatePixels();
-				line(startMouseX, startMouseY, mouseX, mouseY);
+				// Add image / upload tool
 			}
 
 		}

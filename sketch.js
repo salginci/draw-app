@@ -68,12 +68,13 @@ function draw() {
 	//if an object contains a particular method or property
 	//if there isn't a draw method the app will alert the user
 	
-     if (mouseIsPressed && mouseX >= 0 && mouseY >= 0 && mouseX < width && mouseY < height) {
+    // To be sure drawing happens only if user clicks in canvas this control added.
+  //   if (mouseIsPressed && mouseX >= 0 && mouseY >= 0 && mouseX < width && mouseY < height) {
       
     if (toolbox.selectedTool.hasOwnProperty("draw")) {
 		toolbox.selectedTool.draw();
 	} else {
 		alert("it doesn't look like your tool has a draw method!");
 	}
-     }
+   //  }
 }
