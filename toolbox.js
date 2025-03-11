@@ -5,6 +5,7 @@ function Toolbox() {
 
     this.tools = [];
     this.selectedTool = null;
+    this.toolStates = new Map();
 
     var toolbarItemClick = function () {
         //remove any existing borders
@@ -48,25 +49,27 @@ function Toolbox() {
     };
 
     this.selectTool = function (toolName) {
-        //search through the tools for one that's name matches
-        //toolName
         for (var i = 0; i < this.tools.length; i++) {
             if (this.tools[i].name == toolName) {
-                //if the tool has an unselectTool method run it.
-                if (this.selectedTool != null && this.selectedTool.hasOwnProperty(
-                        "unselectTool")) {
-                    this.selectedTool.unselectTool();
-                }
+                // Unselect current tool if exists
                 if (this.selectedTool != null) {
+                    if (this.selectedTool.hasOwnProperty("unselectTool")) {
+                        this.selectedTool.unselectTool();
+                    }
                     select(".options").html("");
                 }
-                //select the tool and highlight it on the toolbar
+
+                // Select new tool
                 this.selectedTool = this.tools[i];
-                select("#" + toolName + "sideBarItem").style("border", "2px solid blue");
+                select("#" + toolName + "sideBarItem").style("border", "2px solid rgb(247 97 12)");
 
-                //if the tool has an options area. Populate it now.
+                // Call selectTool if it exists
+                if (this.selectedTool.hasOwnProperty("selectTool")) {
+                    this.selectedTool.selectTool();
+                }
+
+                // Set up options
                 if (this.selectedTool.hasOwnProperty("populateOptions")) {
-
                     this.selectedTool.populateOptions();
                     select(".options").style('background-color', 'rgb(191 191 191)');
                 } else {
@@ -76,5 +79,12 @@ function Toolbox() {
         }
     };
 
+    this.saveToolState = function(toolName, state) {
+        this.toolStates.set(toolName, state);
+    };
+
+    this.getToolState = function(toolName) {
+        return this.toolStates.get(toolName);
+    };
 
 }

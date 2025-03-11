@@ -6,26 +6,72 @@ function SprayCanTool() {
     this.points = 13;
     this.spread = 10;
     this.radius = 5;
-    this.draw = function () {
+
+    this.draw = function (palette) {
         
-        
-    this.radius = this.sliderRadius.value();
-    this.points = this.sliderPoints.value();
-    this.spread = this.sliderSpread.value();
-        
-        var r = random(5, this.radius);
-        if (mouseIsPressed) {
-            for (var i = 0; i < this.points; i++) {
-                point(random(mouseX - this.spread, mouseX + this.spread), random(mouseY - this.spread, mouseY + this.spread));
+       var rd = this.sliderRadius.value();
+        var pt= this.sliderPoints.value();
+        var sp= this.sliderSpread.value();
+           if (mouseIsPressed) {
+              
+                 if (mouseY < 0 || mouseX < 0 ){
+			 return;
+			}
+               
+               
+            var pointsArray=[];
+               console.log(this.points);
+               for (var i = 0; i < this.points; i++) {
+                pointsArray.push({x:random(mouseX -  sp, mouseX +  sp),y: random(mouseY -  sp, mouseY +  sp)});
+            }
+               
+                var clr=palette.borderColor;
+               
+                var frg=palette.foregroundColor;
+                 
+               
+        var drw={
+             x:mouseX,
+            y:mouseY,
+            radius:rd,
+            pointsArray:pointsArray,
+            spread:sp,
+            strokeColor:clr,
+             foregroundColor:frg,
+            display:function()
+            {
+                push();
+                
+             stroke(this.strokeColor);
+                  fill(this.foregroundColor)
+               
+            for (var i = 0; i < this.pointsArray.length; i++) {
+              
+                ellipse(this.pointsArray[i].x,this.pointsArray[i].y ,this.radius,this.radius );
+            }
+            
+       
+                pop();
             }
         }
+        console.log("drawing");
+        
+        drawings.push(drw);
+        
+       // var r = random(5, this.radius);
+        
+        
+    }
+     
+        
+        
     };
 
 
   
     this.sliderRadius = null;
- this.sliderPoints = null;
- this.sliderSpread = null;
+    this.sliderPoints = null;
+    this.sliderSpread = null;
     this.populateOptions = function () {
         select(".options").style('background-color', '#333');
 

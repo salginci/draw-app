@@ -2,37 +2,47 @@ function PanTool(){
 	this.icon = "assets/pan.png";
 	this.name = "Pan";
 
-	var startMouseX = -1;
-	var startMouseY = -1;
-	var drawing = false;
+	var startX = -1;
+	var startY = -1;
+	var isPanning = false;
 
 	this.draw = function(){
-
 		if(mouseIsPressed){
-			if(startMouseX == -1){
-				startMouseX = mouseX;
-				startMouseY = mouseY;
-				drawing = true;
-                
-               // Loads the current value of each pixel on the canvas into the pixels array. 
-               // With this it has been preventing drawing lines for each mouseX and mouseY
-			   loadPixels();
+			if(startX == -1){
+				startX = mouseX;
+				startY = mouseY;
+				isPanning = true;
+				loadPixels();
+			} else {
+				// Calculate the difference in position
+				let dx = mouseX - startX;
+				let dy = mouseY - startY;
+				
+				// Update the position of all drawings
+				for(let drawing of drawings){
+					if(drawing.x !== undefined && drawing.y !== undefined){
+						drawing.x += dx;
+						drawing.y += dy;
+					}
+				}
+				
+				// Update starting position
+				startX = mouseX;
+				startY = mouseY;
+				
+				// Force redraw
+				redraw();
 			}
-
-			else{
-                // Updates the canvas with the RGBA values in the pixels array.
-		        updatePixels();
-				/// move objects any related area.
-			}
-
-		}
-
-		else if(drawing){
-			drawing = false;
-			startMouseX = -1;
-			startMouseY = -1;
+		} else {
+			startX = -1;
+			startY = -1;
+			isPanning = false;
 		}
 	};
 
-
+	this.mouseReleased = function() {
+		startX = -1;
+		startY = -1;
+		isPanning = false;
+	};
 }

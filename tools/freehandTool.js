@@ -9,38 +9,68 @@ function FreehandTool() {
     //we haven't started drawing yet.
     var previousMouseX = -1;
     var previousMouseY = -1;
+    var isDrawing = false;
 
     this.draw = function () {
-        //if the mouse is pressed
         if (mouseIsPressed) {
-            //check if they previousX and Y are -1. set them to the current
-            //mouse X and Y if they are.
-            if (previousMouseX == -1) {
-                previousMouseX = mouseX;
-                previousMouseY = mouseY;
-            }
-            //if we already have values for previousX and Y we can draw a line from 
-            //there to the current mouse location
-            else {
-                push();
-                var weight = this.slider.value();
+            // Check if mouse is inside canvas
+            if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+                if (previousMouseX == -1) {
+                    previousMouseX = mouseX;
+                    previousMouseY = mouseY;
+                    isDrawing = true;
+                } else {
+                    // Draw the current line segment
+                    push();
+                    var weight = this.slider.value();
+                    strokeWeight(weight);
+                    stroke(colourP.foregroundColor);
+                    line(previousMouseX, previousMouseY, mouseX, mouseY);
+                    pop();
 
-                strokeWeight(weight);
-                line(previousMouseX, previousMouseY, mouseX, mouseY);
-                pop();
-                previousMouseX = mouseX;
-                previousMouseY = mouseY;
+                    // Save the line segment
+                    let drw = {
+                        type: 'freehand',
+                        x1: previousMouseX,
+                        y1: previousMouseY,
+                        x2: mouseX,
+                        y2: mouseY,
+                        weight: weight,
+                        color: colourP.foregroundColor,
+                        display: function() {
+                            push();
+                            strokeWeight(this.weight);
+                            stroke(this.color);
+                            line(this.x1, this.y1, this.x2, this.y2);
+                            pop();
+                        }
+                    };
+                    drawings.push(drw);
+                    
+                    // Update previous position
+                    previousMouseX = mouseX;
+                    previousMouseY = mouseY;
+                }
             }
-        }
-        //if the user has released the mouse we want to set the previousMouse values 
-        //back to -1.
-        //try and comment out these lines and see what happens!
-        else {
+        } else {
+            // Reset when mouse is released
+            if (isDrawing) {
+                saveState();
+            }
+            isDrawing = false;
             previousMouseX = -1;
             previousMouseY = -1;
         }
     };
 
+    this.mouseReleased = function() {
+        if (isDrawing) {
+            saveState();
+        }
+        isDrawing = false;
+        previousMouseX = -1;
+        previousMouseY = -1;
+    };
 
     this.strokeWeight = 5;
     this.slider = null;

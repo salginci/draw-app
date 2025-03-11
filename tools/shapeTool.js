@@ -5,130 +5,170 @@ function ShapeTool() {
     var startMouseX = -1;
     var startMouseY = -1;
     var drawing = false;
+    var isActive = false;
 
-    // Initialize selectedShape to null
+    // Initialize shape properties
     this.selectedShape = "rect";
+    this.filled = false;
+    
+    this.draw = function(palette) {
+        if(!isActive) return;
 
-    // Draws the shape to the screen 
-    this.draw = function () {
-        // Only draw when the mouse is clicked
         if (mouseIsPressed) {
-            // If it's the start of drawing a new shape
             if (startMouseX == -1) {
                 startMouseX = mouseX;
                 startMouseY = mouseY;
                 drawing = true;
-                // Save the current pixel array
                 loadPixels();
             } else {
-
-                var weight = this.slider.value();
-                push()
-                strokeWeight(weight);
-
-
-                // Update the screen with the saved pixels to hide any previous
-                // shape between mouse pressed and released
                 updatePixels();
-                // Draw the shape based on the selectedShape
-
-
-
-                if (this.selectedShape == "rect") {
-                    rect(startMouseX, startMouseY, mouseX - startMouseX, mouseY - startMouseY);
-                } else if (this.selectedShape == "triangle") {
-
-
-                    var x1 = startMouseX;
-                    var y1 = startMouseY;
-                    var x2 = mouseX;
-                    var y2 = mouseY;
-                    var x3 = startMouseX + (mouseX - startMouseX) / 2;
-                    var y3 = mouseY;
-
-
-                    triangle(x1, y1, x2, y2, x3, y3);
-
-
-
-                } else if (this.selectedShape == "circle") {
-
-                    var centerX = (startMouseX + mouseX) / 2;
-                    var centerY = (startMouseY + mouseY) / 2;
-                    var radius = dist(startMouseX, startMouseY, mouseX, mouseY) / 2;
-
-
-                    ellipse(centerX, centerY, radius * 2);
+                
+                // Preview the shape while drawing
+                push();
+                if (this.filled) {
+                    fill(palette.foregroundColor);
+                } else {
+                    noFill();
                 }
-            }
+                stroke(palette.borderColor);
+                strokeWeight(this.slider.value());
 
-            pop();
+                // Draw different shapes based on selection
+                switch(this.selectedShape) {
+                    case "rect":
+                        rect(startMouseX, startMouseY, mouseX - startMouseX, mouseY - startMouseY);
+                        break;
+                    case "ellipse":
+                        let w = mouseX - startMouseX;
+                        let h = mouseY - startMouseY;
+                        ellipse(startMouseX + w/2, startMouseY + h/2, abs(w), abs(h));
+                        break;
+                    case "triangle":
+                        triangle(
+                            startMouseX, mouseY,  // Bottom left
+                            startMouseX + (mouseX - startMouseX)/2, startMouseY,  // Top middle
+                            mouseX, mouseY  // Bottom right
+                        );
+                        break;
+                }
+                pop();
+            }
         } else if (drawing) {
-            // Save the pixels with the most recent shape and reset the
-            // drawing bool and start locations
-            loadPixels();
+            // When mouse is released, save the shape
+            let drw = {
+                type: 'shape',
+                shape: this.selectedShape,
+                x1: startMouseX,
+                y1: startMouseY,
+                x2: mouseX,
+                y2: mouseY,
+                filled: this.filled,
+                weight: this.slider.value(),
+                strokeColor: palette.borderColor,
+                fillColor: palette.foregroundColor,
+                display: function() {
+                    push();
+                    if (this.filled) {
+                        fill(this.fillColor);
+                    } else {
+                        noFill();
+                    }
+                    stroke(this.strokeColor);
+                    strokeWeight(this.weight);
+                    
+                    switch(this.shape) {
+                        case "rect":
+                            rect(this.x1, this.y1, this.x2 - this.x1, this.y2 - this.y1);
+                            break;
+                        case "ellipse":
+                            let w = this.x2 - this.x1;
+                            let h = this.y2 - this.y1;
+                            ellipse(this.x1 + w/2, this.y1 + h/2, abs(w), abs(h));
+                            break;
+                        case "triangle":
+                            triangle(
+                                this.x1, this.y2,
+                                this.x1 + (this.x2 - this.x1)/2, this.y1,
+                                this.x2, this.y2
+                            );
+                            break;
+                    }
+                    pop();
+                }
+            };
+            drawings.push(drw);
             drawing = false;
             startMouseX = -1;
             startMouseY = -1;
+            saveState();
         }
     };
 
-    this.strokeWeight = 5;
-    this.slider = null;
-    this.removeBorder = function () {
-        var elements = document.querySelectorAll(".shape-button");
+    this.unselectTool = function() {
+        drawing = false;
+        startMouseX = -1;
+        startMouseY = -1;
+        isActive = false;
+    };
 
-        // Loop through each element and apply the style
-        elements.forEach(function (element) {
-            element.style.border = "none";
-        });
-    }
+    this.selectTool = function() {
+        isActive = true;
+    };
 
-    this.populateOptions = function () {
-        // CUSTOM CODE FOR SPREAD OPTIONS
+    // Populate the options
+    this.populateOptions = function() {
         select(".options").style('background-color', '#333');
-
-        this.label = createP("Line Weight");
+        
+        // Create shape buttons container
+        let shapesContainer = createDiv();
+        shapesContainer.parent("optionsArea");
+        
+        // Rectangle button
+        let rectButton = createButton('');
+        rectButton.class('shape-button rectangle-button');
+        rectButton.parent(shapesContainer);
+        rectButton.mousePressed(() => {
+            this.selectedShape = 'rect';
+            // Remove active class from all buttons
+            selectAll('.shape-button').forEach(btn => btn.style('background-color', ''));
+            rectButton.style('background-color', 'rgb(247 97 12)');
+        });
+        
+        // Circle button
+        let circleButton = createButton('');
+        circleButton.class('shape-button circle-button');
+        circleButton.parent(shapesContainer);
+        circleButton.mousePressed(() => {
+            this.selectedShape = 'ellipse';
+            selectAll('.shape-button').forEach(btn => btn.style('background-color', ''));
+            circleButton.style('background-color', 'rgb(247 97 12)');
+        });
+        
+        // Triangle button
+        let triangleButton = createButton('');
+        triangleButton.class('shape-button triangle-button');
+        triangleButton.parent(shapesContainer);
+        triangleButton.mousePressed(() => {
+            this.selectedShape = 'triangle';
+            selectAll('.shape-button').forEach(btn => btn.style('background-color', ''));
+            triangleButton.style('background-color', 'rgb(247 97 12)');
+        });
+        
+        // Set initial active button
+        rectButton.style('background-color', 'rgb(247 97 12)');
+        
+        // Fill checkbox
+        this.fillCheckbox = createCheckbox('Filled', this.filled);
+        this.fillCheckbox.parent("optionsArea");
+        this.fillCheckbox.changed(() => {
+            this.filled = this.fillCheckbox.checked();
+        });
+        
+        // Stroke weight slider
+        this.label = createP("Border Weight");
         this.label.parent("optionsArea");
-        this.label.style('font-size', '14px');
-        this.slider = createSlider(0, 20, this.strokeWeight, 1);
-        this.slider.size(100);
+        this.label.style('color', '#fff');
+        this.slider = createSlider(1, 20, 1);
         this.slider.parent("optionsArea");
-
-
-        this.rectangleButton = createButton("");
-        this.rectangleButton.mousePressed(() => {
-            this.removeBorder();
-
-            this.selectedShape = "rect";
-            this.rectangleButton.style("border", "2px solid blue");
-        });
-        this.rectangleButton.class('shape-button rectangle-button');
-
-
-        this.rectangleButton.parent("optionsArea");
-
-
-
-        this.triangleButton = createButton("");
-        this.triangleButton.mousePressed(() => {
-            this.removeBorder();
-            this.selectedShape = "triangle";
-            this.triangleButton.style("border", "2px solid blue");
-        });
-        this.triangleButton.class('shape-button triangle-button');
-        this.triangleButton.parent("optionsArea");
-
-
-
-        this.circleButton = createButton("");
-        this.circleButton.mousePressed(() => {
-            this.removeBorder();
-            this.selectedShape = "circle";
-            this.circleButton.style("border", "2px solid blue");
-        });
-        this.circleButton.class('shape-button circle-button');
-        this.circleButton.parent("optionsArea");
-        // END OF CUSTOM CODE
     };
 }

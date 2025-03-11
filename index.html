@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-     
+      <!--  CUSTOM/ UPDATED P5 LIBRARIES USED FOR COLOR PICKER COMPONENT. EXISTING LIBRARY HAS ISSUE.  -->
        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
          <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
   
   
    
-   
+    <!--  CUSTOM COLORIS LIBRARY USED FOR COLOR PICKER COMPONENT   -->
       <script src="lib/coloris.min.js"></script>   
+       <!--  CUSTOM LIBRARY  -->
  
       <!-- We will keep document based javascript files here. -->
     <script src="lib/paintshop.js"></script>   
@@ -26,9 +27,7 @@
     <script src="/tools/brushTool.js"></script>
     <script src="/tools/cropTool.js"></script>
     <script src="/tools/imageTool.js"></script>
-    <script src="/tools/panTool.js"></script>
     <script src="/tools/shapeTool.js"></script>
-    <script src="/tools/textTool.js"></script>
 
     <link rel="stylesheet" type="text/css" href="/styles/style.css">
    <link rel="stylesheet" type="text/css" href="lib/coloris.min.css">
@@ -45,18 +44,31 @@
         <button id="clearButton">Clear</button>
         <button id="saveImageButton">Save Image</button>
                    </div>
-           <div id="optionsArea" class="box options">
+               <div class="secondNav">
+           <div id="optionsArea" class="options">
                
           </div>
+               
+         <div class="colorSwatchesContainer" role="group" aria-label="Color controls">
+             <p id="foregroundLabel">Foreground</p>
+             <div id="foregroundColorSwatch" class="colorSwatch" role="button" 
+                  aria-labelledby="foregroundLabel" tabindex="0"></div>
+              <p id="backgroundLabel">Background</p>
+             <div id="backgroundColorSwatch" class="colorSwatch" role="button" 
+                  aria-labelledby="backgroundLabel" tabindex="0"></div>
+               <p id="borderLabel">Border</p>  
+             <div id="borderColorSwatch" class="colorSwatch" role="button" 
+                  aria-labelledby="borderLabel" tabindex="0"></div>
+        </div>
+            <div class="clearFloat">
+          </div>
+          </div>
+                
+       
           
       </div>
-      <div class="box" id="sidebar">
-          <!--     CUSTOM CODE START  -->
-         <div class="colorSwatchesContainer">
-             <div id="foregroundColorSwatch" class="colorSwatch"></div>
-             <div id="backgroundColorSwatch" class="colorSwatch"></div>
-        </div>
-        <!--  CUSTOM CODE END  -->
+      <div class="box" id="sidebar" role="toolbar" aria-label="Drawing tools">
+       
       </div>
       <div id="content"></div>
  

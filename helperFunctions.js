@@ -10,6 +10,7 @@ function HelperFunctions() {
 		//call loadPixels to update the drawing state
 		//this is needed for the mirror tool
 		loadPixels();
+        drawings=[];
 	});
 
 	//event handler for the save image button. saves the canvsa to the
@@ -17,4 +18,32 @@ function HelperFunctions() {
 	select("#saveImageButton").mouseClicked(function() {
 		saveCanvas("myPicture", "jpg");
 	});
+
+	this.downloadDrawing = function() {
+		saveCanvas("myDrawing", "png");
+	};
+
+	this.importImage = function(file) {
+		loadImage(file.data, img => {
+			let drw = {
+				type: 'image',
+				x: width/2 - img.width/2,
+				y: height/2 - img.height/2,
+				image: img,
+				display: function() {
+					image(this.image, this.x, this.y);
+				}
+			};
+			drawings.push(drw);
+			saveState();
+		});
+	};
+
+	this.clearCanvas = function() {
+		if(confirm("Are you sure you want to clear the canvas? This action cannot be undone.")) {
+			drawings = [];
+			background(255);
+			saveState();
+		}
+	};
 }

@@ -7,7 +7,8 @@ html, body {
     position: relative;
 	grid-area: sidebar;
 	overflow-y: scroll;
-      background-color: #444;
+    background-color:  #1e365c; 
+    padding: 4px;
 }
 
 #content {
@@ -18,10 +19,11 @@ html, body {
 .header {
   grid-area: header;
   font-family: Helvetica, sans-serif;
-  padding: 0;
-  background-color: #34349d;  
+  padding: 0; 
   color: #fff;
- 
+    background-color: rgb(247 97 12);
+  
+  
 }
 
 .footer{
@@ -39,18 +41,9 @@ html, body {
 	max-Width:50px;
 }
 
-.colourPalette{
-	grid-area: colourP;
-	display:flex;
-	flex-direction:grid;
-	flex-flow: wrap;
-}
 
-.options{
-	grid-area: options;
-	padding-left: 20px;
-    height: 46px;
-}
+
+
 
 .colourSwatches{
 	box-sizing: border-box;
@@ -60,11 +53,7 @@ html, body {
 	max-width: 40px;
 	 
 }
- .header
-{
-    background-color: #34349d;
-    height: 80px;
-}
+
 
 
 	.wrapper {
@@ -72,7 +61,7 @@ html, body {
 	height: 100%;
         width: 100%;
 	grid-template-columns: 70px auto; 
-	grid-template-rows: 80px auto;  
+	grid-template-rows: 100px auto;  
 	grid-template-areas:
 		"header header"
 		"sidebar content";
@@ -94,94 +83,191 @@ html, body {
 
   color: #fff;
   font-size: 150%;
+    
 }
 
-
+.secondNav{
+   
+       height:50px;
+    width: 100%;
+      background-color: #1e365c !important;
+}
 .colorSwatchesContainer {
-    position: absolute;
-    bottom: 10px;  
-    left: 0;
+ width: 30%;
+   
     right: 0;
-    text-align: center;
+   padding: 10px;
+     height:30px;
+    padding-left: 5px;
+    color:rgb(247 97 12);
+      background-color: #1e365c !important;
+    float: right;
+    text-align: right
+}
+
+.colorSwatchesContainer div,p {
+    display: inline;
+}
+.clearFloat
+{
+    float:none;
 }
 
 .colorSwatch {
-    display: inline-block; 
-    width: 40px;  
-    height: 40px;  
-    margin: 5px; 
+   
+    width: 20px;  
+    height: 20px;
+    
+    
+}
+.colorSwatchesContainer p {
+    font-size: 10px;
+    color:#fff;
 }
 
 #foregroundColorSwatch {
-    position: absolute;
-    bottom: 20px;  
-    left: 5px;  
+   
     width: 20px;  
-    height: 40px;
-    z-index: 2;  
+    height: 20px; 
 }
 #backgroundColorSwatch {
-    position: absolute;
-    bottom: 10px;  
-    left: 15px;  
     width: 20px;  
+    height: 20px; 
+}
+
+#borderColorSwatch {
+      width: 20px;  
+    height: 20px; 
+   
+}
+#appHeader
+{
+ height: 36px;
+    padding-left: 15px;
+    padding-top: 10px;
+    color: #fff ;
+}
+.options{
+    display: inline;
+    float: left;
+    width: 60%;
+    bottom: 0px;
+    padding-left: 20px;
     height: 40px;
-    z-index: 1;  
+    padding-top: 5px;
+    background-color: #1e365c !important;
+    color: rgb(247 97 12);
+}
+
+
+#optionsArea {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 #optionsArea button {
-  display: inline-block;
-  margin-right: 10px; 
+    display: inline-block;
+    margin-right: 10px;
 }
 
 #optionsArea label {
-  display: inline-block;
-  width: 100px; 
-  margin-right: 10px;  
+    color: #fff;
+    margin-right: 10px;
 }
 
 #optionsArea p {
-  display: inline-block;
-  margin-right: 10px;  
+    color: #fff;
+    margin-right: 10px;
 }
 
-#optionsArea input {
-  display: inline-block;
-  width: 100px; 
-  margin-right: 10px;  
+#optionsArea input[type="range"] {
+    width: 100px;
 }
 
 .rectangle-button {
-    background-image: url('/assets/rectangle.png'); 
-     background-size: 90% 90%;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 30px; 
-      height: 30px;
-    margin-right: 5px;  
-}
-
-.triangle-button {
-    background-image: url('/assets/triangle.png');  
-     background-size: 90% 90%;
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 30px; 
-      height: 30px;
-    margin-right: 5px; 
-}
-
-.circle-button {
-    background-image: url('/assets/oval.png'); 
+    background-image: url('/assets/rectangle.png');
     background-size: 90% 90%;
     background-repeat: no-repeat;
     background-position: center;
-    width: 30px; 
-    height: 30px;
-    margin-right: 5px;  
 }
-.shape-button{
-border:none;
+
+.circle-button {
+    background-image: url('/assets/oval.png');
+    background-size: 90% 90%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.triangle-button {
+    background-image: url('/assets/triangle.png');
+    background-size: 90% 90%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.shape-button {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+/* Style for the shape selector dropdown */
+.options select {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #666;
+    background-color: #fff;
+    min-width: 100px;
+}
+
+/* Style for the checkbox container */
+.options .checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Style for the checkbox */
+.options input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+}
+
+/* Style for checkbox label */
+.options label {
+    color: white;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+/* Style for the slider container */
+.options .slider-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Style for the slider label */
+.options p {
+    color: white;
+    margin: 0;
+}
+
+/* Style for the slider */
+.options input[type="range"] {
+    width: 100px;
+    margin: 0;
+}
+
+/* Add some spacing between options */
+.options > * {
+    margin-right: 15px;
 }
 
 
